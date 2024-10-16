@@ -59,6 +59,7 @@ func NewServeCommand() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			numscriptInterpreter, _ := cmd.Flags().GetBool(NumscriptInterpreterFlag)
 
 			options := []fx.Option{
 				fx.NopLogger,
@@ -70,6 +71,7 @@ func NewServeCommand() *cobra.Command {
 				bunconnect.Module(*connectionOptions, service.IsDebug(cmd)),
 				storage.NewFXModule(serveConfiguration.autoUpgrade),
 				systemcontroller.NewFXModule(systemcontroller.ModuleConfiguration{
+					NumscriptInterpreter: numscriptInterpreter,
 					NSCacheConfiguration: ledgercontroller.CacheConfiguration{
 						MaxCount: serveConfiguration.numscriptCacheMaxCount,
 					},
