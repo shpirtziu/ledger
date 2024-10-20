@@ -36,7 +36,7 @@ var _ = Context("Ledger accounts list API tests", func() {
 			Output:                       GinkgoWriter,
 			Debug:                        debug,
 			NatsURL:                      natsServer.GetValue().ClientURL(),
-			ExperimentalNumscriptRewrite: true,
+			ExperimentalNumscriptRewrite: false,
 		}
 	})
 

@@ -29,7 +29,7 @@ var _ = Context("Ledger engine tests", func() {
 			Output:                       GinkgoWriter,
 			Debug:                        debug,
 			NatsURL:                      natsServer.GetValue().ClientURL(),
-			ExperimentalNumscriptRewrite: true,
+			ExperimentalNumscriptRewrite: false,
 		}
 	})
 	BeforeEach(func() {
