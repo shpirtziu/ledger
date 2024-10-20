@@ -52,7 +52,7 @@ func (ctrl *DefaultController) GetLedgerController(ctx context.Context, name str
 		var ledgerController ledgercontroller.Controller = ledgercontroller.NewDefaultController(
 			*l,
 			store,
-			ledgercontroller.NewInterpreterNumscriptParser(),
+			ctrl.parser,
 			ledgercontroller.WithMeter(ctrl.meter),
 		)
 
@@ -132,6 +132,7 @@ func NewDefaultController(store Store, listener ledgercontroller.Listener, opts 
 		store:    store,
 		listener: listener,
 		registry: ledgercontroller.NewStateRegistry(),
+		parser:   ledgercontroller.NewDefaultNumscriptParser(),
 	}
 	for _, opt := range append(defaultOptions, opts...) {
 		opt(ret)

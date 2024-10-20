@@ -40,7 +40,7 @@ const (
 	NumscriptCacheMaxCountFlag = "numscript-cache-max-count"
 	AutoUpgradeFlag            = "auto-upgrade"
 	ExperimentalFeaturesFlag   = "experimental-features"
-	NumscriptInterpreterFlag   = "numscript-interpreter"
+	NumscriptInterpreterFlag   = "experimental-numscript-interpreter"
 )
 
 func NewServeCommand() *cobra.Command {
