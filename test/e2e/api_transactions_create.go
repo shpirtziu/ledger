@@ -24,12 +24,28 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+func MigrateRuntimeErr(numscriptRewrite bool) string {
+	if numscriptRewrite {
+		return string(components.V2ErrorsEnumInterpreterRuntime)
+	} else {
+		return string(components.V2ErrorsEnumInsufficientFund)
+	}
+}
+
+func MigrateErrCompilationFailed(numscriptRewrite bool) string {
+	if numscriptRewrite {
+		return string(components.V2ErrorsEnumInterpreterRuntime)
+	} else {
+		return string(components.V2ErrorsEnumCompilationFailed)
+	}
+}
+
 var _ = Context("Ledger accounts list API tests", func() {
 	for _, data := range []struct {
 		description      string
 		numscriptRewrite bool
 	}{
-		// {"default", false},
+		{"default", false},
 		{"numscript rewrite", true},
 	} {
 		Context(data.description, func() {
@@ -210,8 +226,15 @@ var _ = Context("Ledger accounts list API tests", func() {
 						}}
 					})
 					It("should fail", func() {
+						var expectedErr string
+						if data.numscriptRewrite {
+							expectedErr = string(components.V2ErrorsEnumInterpreterRuntime)
+						} else {
+							expectedErr = string(components.V2ErrorsEnumInsufficientFund)
+						}
+
 						Expect(err).To(HaveOccurred())
-						Expect(err).To(HaveErrorCode(string(components.V2ErrorsEnumInterpreterRuntime)))
+						Expect(err).To(HaveErrorCode(expectedErr))
 					})
 				})
 				When("with nil amount", func() {
@@ -334,9 +357,17 @@ var _ = Context("Ledger accounts list API tests", func() {
 							Ledger: "default",
 						}
 					})
-					It("should fail with "+string(components.V2ErrorsEnumInterpreterRuntime)+" code", func() {
+
+					var expectedErr string
+					if data.numscriptRewrite {
+						expectedErr = string(components.V2ErrorsEnumInterpreterRuntime)
+					} else {
+						expectedErr = string(components.V2ErrorsEnumCompilationFailed)
+					}
+
+					It("should fail with "+expectedErr+" code", func() {
 						Expect(err).NotTo(Succeed())
-						Expect(err).To(HaveErrorCode(string(components.V2ErrorsEnumInterpreterRuntime)))
+						Expect(err).To(HaveErrorCode(expectedErr))
 					})
 				})
 				When("using a negative amount in the script with a variable", func() {
@@ -361,9 +392,16 @@ var _ = Context("Ledger accounts list API tests", func() {
 							Ledger: "default",
 						}
 					})
-					It("should fail with "+string(components.V2ErrorsEnumInterpreterRuntime)+" code", func() {
+
+					var expectedErr string
+					if data.numscriptRewrite {
+						expectedErr = string(components.V2ErrorsEnumInterpreterRuntime)
+					} else {
+						expectedErr = string(components.V2ErrorsEnumCompilationFailed)
+					}
+					It("should fail with "+expectedErr+" code", func() {
 						Expect(err).NotTo(Succeed())
-						Expect(err).To(HaveErrorCode(string(components.V2ErrorsEnumInterpreterRuntime)))
+						Expect(err).To(HaveErrorCode(expectedErr))
 					})
 				})
 				Context("with error on script", func() {
@@ -380,9 +418,15 @@ var _ = Context("Ledger accounts list API tests", func() {
 							Ledger: "default",
 						}
 					})
-					It("should fail with "+string(components.V2ErrorsEnumInterpreterParse)+" code", func() {
+					var expectedErr string
+					if data.numscriptRewrite {
+						expectedErr = string(components.V2ErrorsEnumInterpreterParse)
+					} else {
+						expectedErr = string(components.V2ErrorsEnumCompilationFailed)
+					}
+					It("should fail with "+expectedErr+" code", func() {
 						Expect(err).NotTo(Succeed())
-						Expect(err).To(HaveErrorCode(string(components.V2ErrorsEnumInterpreterParse)))
+						Expect(err).To(HaveErrorCode(expectedErr))
 					})
 				})
 				Context("with no postings", func() {
