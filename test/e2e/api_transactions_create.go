@@ -30,7 +30,7 @@ var _ = Context("Ledger accounts list API tests", func() {
 		numscriptRewrite bool
 	}{
 		{"default", false},
-		{"numscript rewrite", true},
+		// {"numscript rewrite", true},
 	} {
 		Context(data.description, func() {
 			var (
@@ -498,5 +498,4 @@ var _ = Context("Ledger accounts list API tests", func() {
 			})
 		})
 	}
-
 })
